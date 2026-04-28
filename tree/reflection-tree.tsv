@@ -1,0 +1,25 @@
+id	parentId	type	text	options	target	signal
+START	null	start	Good evening. Let's look at your day.			
+A1_OPEN	START	question	How would you describe today in one word?	Tough|Productive|Mixed|Frustrating		
+A1_D1	A1_OPEN	decision		answer=Productive|Mixed:A1_Q_AGENCY_HIGH;answer=Tough|Frustrating:A1_Q_AGENCY_LOW		
+A1_Q_AGENCY_HIGH	A1_D1	question	You said "{A1_OPEN.answer}". When something went well today, what made it happen?	I prepared well|The team came through|I got lucky|I adapted on the fly		axis1:internal
+A1_Q_AGENCY_LOW	A1_D1	question	You said "{A1_OPEN.answer}". When things got difficult, what was your first instinct?	Figure out what I could control|Wait for someone to step in|Push through alone|Feel stuck		axis1:external
+A1_R_INT	A1_Q_AGENCY_HIGH	reflection	You see your hand in what happened today. That's agency — not everything went your way, but you stayed in the driver's seat.			axis1:internal
+A1_R_EXT	A1_Q_AGENCY_LOW	reflection	A tough day pulls attention outward — to what others did or didn't do. Fair enough. But somewhere in there, you made a call. What was it?			axis1:external
+BRIDGE_1_2	A1_R_INT	bridge	Now let's shift from how you handled things — to what you gave.		A2_OPEN	
+BRIDGE_1_2B	A1_R_EXT	bridge	Now let's shift from how you handled things — to what you gave.		A2_OPEN	
+A2_OPEN	null	question	Think about one interaction you had today. Were you giving or expecting?	I helped someone|I taught someone something|I needed support|I felt overlooked		
+A2_Q1	A2_OPEN	question	You mentioned "{A2_OPEN.answer}". What was the primary driver of that interaction?	Personal growth|Receiving credit|Fixing a problem|Helping a peer		axis2:contribution
+A2_D1	A2_Q1	decision		answer=Personal growth|Fixing a problem:A2_R_CONTRIB;answer=Receiving credit|Felt overlooked:A2_R_ENTITLED		
+A2_R_CONTRIB	A2_D1	reflection	You're focused on the work itself and the people around you. That's the hallmark of a contributor.			axis2:contribution
+A2_R_ENTITLED	A2_D1	reflection	It's natural to want recognition. But often, the best way to earn it is to focus on what you're contributing.			axis2:entitlement
+BRIDGE_2_3	A2_R_CONTRIB	bridge	Let’s look at the bigger picture.		A3_OPEN	
+BRIDGE_2_3B	A2_R_ENTITLED	bridge	Let’s look at the bigger picture.		A3_OPEN	
+A3_OPEN	null	question	When you think about the biggest challenge today, who was the main focus?	Myself|The team|A specific colleague|The customer		
+A3_D1	A3_OPEN	decision		answer=Myself:A3_Q_SELF;answer=The team|A specific colleague|The customer:A3_Q_OTHER		
+A3_Q_SELF	A3_D1	question	That happens. What would it look like if you viewed it through someone else’s eyes?	They'd be frustrated|They'd appreciate the effort|They'd see a different solution		axis3:self-centric
+A3_Q_OTHER	A3_D1	question	That perspective changes things. What was the most important thing you learned about them today?	Their struggle|Their hidden capability|The impact of my work		axis3:altrocentric
+A3_R_SUMMARY	A3_Q_SELF	reflection	It's natural to focus inward during a tough challenge. Acknowledging that is the first step to widening your radius tomorrow.		SUMMARY	axis3:self-centric
+A3_R_END	A3_Q_OTHER	reflection	You're seeing the system, not just your role in it. That’s the peak of professional reflection.		SUMMARY	axis3:altrocentric
+SUMMARY	null	summary	Today you leaned {axis1.dominant} on agency, {axis2.dominant} on contribution, and {axis3.dominant} on perspective.			
+END	SUMMARY	end	See you tomorrow.
